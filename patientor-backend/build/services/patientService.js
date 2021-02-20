@@ -24,9 +24,8 @@ const addPatient = (object) => {
     return newPatient;
 };
 const updatePatient = (entry, patientId) => {
-    const toAdd = Object.assign({ id: String(Math.random()) }, entry);
     const toUpdate = patients.find(p => p.id === patientId);
-    const updatedArray = toUpdate === null || toUpdate === void 0 ? void 0 : toUpdate.entries.concat(toAdd);
+    const updatedArray = toUpdate === null || toUpdate === void 0 ? void 0 : toUpdate.entries.concat(entry);
     const updatedPatient = Object.assign(Object.assign({}, toUpdate), { entries: updatedArray });
     patients.map(p => p.id === patientId ? updatedPatient : p);
     return updatedPatient;

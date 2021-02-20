@@ -60,6 +60,15 @@ const parseRating = (params) => {
     }
     return params;
 };
+const isDischarge = (params) => {
+    return isDateFormat(params.date) && isString(params.criteria);
+};
+const parseDischarge = (params) => {
+    if (!params || !isDischarge(params)) {
+        throw new Error('Invalid discharge ' + params);
+    }
+    return params;
+};
 const parseType = (object) => {
     switch (object.type) {
         case "HealthCheck":
@@ -89,7 +98,8 @@ const parseType = (object) => {
                 date: parseDate(object.date),
                 specialist: parseSpecialist(object.specialist),
                 diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes),
-                description: parseDescription(object.description)
+                description: parseDescription(object.description),
+                discharge: parseDischarge(object.discharge)
             };
             return newEntry;
         default:

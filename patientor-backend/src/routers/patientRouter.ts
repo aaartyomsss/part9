@@ -19,7 +19,7 @@ patientRouter.post('/:id/entries', (req, res) => {
     /* eslint-disable @typescript-eslint/no-unsafe-assignment */
     const patientId: string = req.params.id;
     const findPatient = patientService.getPatients().find(patient => patient.id === patientId);
-    const { type, date, description, specialist, diagnosisCodes, healthCheckRating, employerName } = req.body;
+    const { type, date, description, specialist, diagnosisCodes, healthCheckRating, employerName, discharge } = req.body;
     const newEntry = toNewEntry({
         type,
         date,
@@ -27,11 +27,16 @@ patientRouter.post('/:id/entries', (req, res) => {
         specialist,
         diagnosisCodes,
         healthCheckRating,
-        employerName
+        employerName,
+        discharge
     });
     if(findPatient){
-        const updated = patientService.updatePatient(newEntry, patientId);
-        res.send(updated);
+        const toAdd = {
+            id: String(Math.random()),
+            ...newEntry
+        };
+        patientService.updatePatient(toAdd, patientId);
+        res.send(toAdd);
     } else {
         throw new Error(`Patient was not found`);
     }

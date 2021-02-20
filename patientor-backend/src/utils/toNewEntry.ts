@@ -1,4 +1,4 @@
-import { NewEntry, HealthCheck, Hospital, OccupationalHealthcare, HealthCheckRating } from '../types';
+import { NewEntry, HealthCheck, Hospital, OccupationalHealthcare, HealthCheckRating, Discharge } from '../types';
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
@@ -70,6 +70,17 @@ const parseRating = (params: any): HealthCheckRating => {
     return params;
 };
 
+const isDischarge = (params: any): params is Discharge => {
+    return isDateFormat(params.date) && isString(params.criteria);
+};
+
+const parseDischarge = (params: any): Discharge => {
+    if (!params || !isDischarge(params)) {
+        throw new Error('Invalid discharge ' + params);
+    }
+    return params;
+};
+
 const parseType = (object: any): Omit<HealthCheck, 'id'> | Omit<Hospital, 'id'> | Omit<OccupationalHealthcare, 'id'> => {
     switch (object.type) {
         case "HealthCheck":
@@ -99,7 +110,8 @@ const parseType = (object: any): Omit<HealthCheck, 'id'> | Omit<Hospital, 'id'> 
                 date: parseDate(object.date),
                 specialist: parseSpecialist(object.specialist),
                 diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes),
-                description: parseDescription(object.description)
+                description: parseDescription(object.description),
+                discharge: parseDischarge(object.discharge)
             };
             return newEntry;
         default:

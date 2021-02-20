@@ -29,12 +29,8 @@ const addPatient = (object: NewPatient): Patient => {
 };
 
 const updatePatient = (entry: NewEntry, patientId: string): Patient => {
-    const toAdd = {
-        id: String(Math.random()),
-        ...entry
-    };
     const toUpdate = patients.find(p => p.id === patientId);
-    const updatedArray = toUpdate?.entries.concat(toAdd as Entry);
+    const updatedArray = toUpdate?.entries.concat(entry as Entry);
     const updatedPatient = {
         ...toUpdate,
         entries: updatedArray
